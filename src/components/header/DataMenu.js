@@ -4,11 +4,7 @@ export const dataMenu = [
         link: "/orders"
       },
       {
-        label: "Категории",
-        link: "/categories"
-      },
-      {
         label: "Продукты",
-        link: "/categories"
+        link: "/products"
       }
 ]
