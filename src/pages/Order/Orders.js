@@ -1,65 +1,91 @@
-import React from 'react';
+import {useState, useEffect} from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Link} from "react-router-dom";
+import axios from "axios";
 import Zagalovok from '../../components/zagalovok';
-
-const columns = [
-  { field: 'id', headerName: 'id заказа', width: 100,  renderCell: (cellValues) => {
-    return <Link to={`/order/${cellValues.row.id}`}>{`${cellValues.row.id}`}</Link>;
-  }},
-  {
-    field: 'number_phone',
-    headerName: 'Номер телефона',
-    width: 150,
-    
-  },
-  {
-    field: 'email',
-    headerName: 'Email',
-    width: 150,
-    
-  },
-  {
-    field: 'summa_order',
-    headerName: 'Сумма заказа',
-    width: 150,
-  },
-  {
-    field: 'date_order',
-    headerName: 'Дата заказа',
-    width: 200,
-    
-  },
-  
-
-  {
-    field: 'status_order',
-    headerName: 'Статус заказа',
-    width: 160,
-    
-  },
-];
-
-const rows = [
-  { id: 1, number_phone: '7888888888', email: 'Jon@mail.ru', summa_order: 355555, date_order: "02.10.2021 12:12:2021", status_order: 'Не обработано' }
-];
-
-
+import {
+  Container,
+  FormControl,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Button,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from "@mui/material";
 
 
 export default function Orders() {
+
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  async function getOrders() {
+    await axios
+    .get("http://delivery-food/admin/api/managedata.php", {
+      params: {
+        type: "allorders",
+      },
+    })
+    .then(function (response) {
+      console.log(response.data);
+      if(response.data != null) {
+        setOrders(response.data);
+      }
+      
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
 
   return (
     <>
     <Zagalovok text="Заказы" />
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-      />
+    <TableContainer component={Paper}>
+      <Table sx={{ width: 1450 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Номер заказа</TableCell>
+            <TableCell align="right">Номер телефона</TableCell>
+            <TableCell align="right">Email</TableCell>
+            <TableCell align="right">Сумма</TableCell>
+            <TableCell align="right">Дата и время</TableCell>
+            <TableCell align="right">Статус заказа</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {orders.length > 0 ? orders.map((row) => (
+            <TableRow
+              key={row.order_number}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+             
+              <TableCell component="th" scope="row">
+              <Link to={`/order/${row.order_number}`}>{row.order_number}</Link>
+              </TableCell>
+              <TableCell align="right">{row.phone} </TableCell>
+              <TableCell align="right">{row.oplata == "cash" ? "Наличные" : "Безналичная оплата"}</TableCell>
+              <TableCell align="right">{row.summa}</TableCell>
+              
+              <TableCell align="right">{row.date+ " "+row.time}</TableCell>
+              <TableCell align="right">{row.status}</TableCell>
+            </TableRow>
+          )) : "Нет данных"}
+        </TableBody>
+      </Table>
+    </TableContainer>
     </div>
     </>
   );

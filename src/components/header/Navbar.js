@@ -22,6 +22,12 @@ export default function Navbar() {
     setAnchorEl(null);
   };
  
+
+  const clearStorage = () => {
+    localStorage.removeItem("user_token_admin");
+    window.location.reload();
+  };
+
   
   const classes = useStyles();
 
@@ -60,7 +66,7 @@ export default function Navbar() {
             <Link to="/" style={{color: "#fff", textDecoration: "none"}}>AdminPanel</Link>
           </Typography>
           
-          <Button color="inherit">Выйти</Button>
+          {localStorage.getItem("user_token_admin") && <Button color="inherit" onClick={(e) => clearStorage()}>Выйти</Button>} 
         </Toolbar>
       </AppBar>
   </div>);

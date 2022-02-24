@@ -37,7 +37,7 @@ const style = {
   p: 4,
 };
 
-function AddProduct() {
+function Product() {
   const [nameGood, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState({});
@@ -208,7 +208,7 @@ function AddProduct() {
 
   return (
     <>
-      <Zagalovok text="Добавление продукта" />
+      <Zagalovok text="Редактирование продукта" />
       <Grid container style={{ textAlign: "center" }}>
         <Grid xs={6}>
           <FormControl>
@@ -390,4 +390,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default Product;

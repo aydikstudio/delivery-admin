@@ -1,3 +1,4 @@
+import {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -19,6 +20,23 @@ const useStyles = makeStyles((theme) => ({
 
 function Products() {
 
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+
+  async function getProducts() {
+    await axios
+      .get("http://delivery-food/admin/api/managedata.php?type=allgetproducts")
+      .then((res) => {
+        if (res.data != null) {
+          setProducts(res.data);
+        }
+      });
+  }
+
   const classes = useStyles();
 
   return (
@@ -27,24 +45,30 @@ function Products() {
       <Link to="/addproduct"><Button variant="contained" style={{float: 'right', marginRight: '20px', marginBottom: "20px"}}><AddIcon /></Button></Link>
       <Grid container spacing={2}>
         
-        <Grid item xs={3}>
-        <Link to="/" className={classes.block}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-              component="img"
-              height="240"
-              image={'/images/products/domikvderevne.png'}
-              className={classes.productImg}
-              alt="green iguana"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Домик в деревне
-              </Typography>
-            </CardContent>
-          </Card>
-          </Link>
-        </Grid>
+
+        {products.map((item) => {
+          return (
+            <Grid item xs={3}>
+            <Link to={`product/${item.product_id}`} className={classes.block}>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardMedia
+                  component="img"
+                  height="240"
+                  image={`http://delivery-food//api/img/products/${item.img}`}
+                  className={classes.productImg}
+                  alt="green iguana"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {item.productName}
+                  </Typography>
+                </CardContent>
+              </Card>
+              </Link>
+            </Grid>
+          )
+        })}
+       
         
       </Grid>
     </>

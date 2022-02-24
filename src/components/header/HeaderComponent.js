@@ -5,6 +5,6 @@ import SideNav from './SideNav';
 export default function  HeaderComponent() {
   return (<div>
       <Navbar />
-      <SideNav />
+      {localStorage.getItem("user_token_admin") && <SideNav /> }
   </div>);
 }
