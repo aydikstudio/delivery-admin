@@ -159,6 +159,7 @@ function AddProduct() {
             label={item.name}
             onClick={(e) => setCategory(item)}
           >
+            <Link to={`/edit/${item.category_id}`}>Ред.</Link>
             {getChildCategories(item)}
           </TreeItem>
         );
@@ -168,7 +169,9 @@ function AddProduct() {
             nodeId={item.category_id}
             label={item.name}
             onClick={(e) => setCategory(item)}
-          />
+          >
+<Link to={`/edit/${item.category_id}`}>Ред.</Link>
+            </TreeItem>
         );
       }
     });
@@ -295,8 +298,9 @@ function AddProduct() {
                               nodeId={item.category_id}
                               label={item.name}
                               onClick={(e) => setCategory(item)}
-                            >
+                            ><Link to={`/edit/${item.category_id}`}>Ред.</Link>
                               {getChildCategories(item)}
+                              
                             </TreeItem>
                           );
                         })}

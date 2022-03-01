@@ -49,7 +49,7 @@ function Products() {
         {products.map((item) => {
           return (
             <Grid item xs={3}>
-            <Link to={`product/${item.product_id}`} className={classes.block}>
+            <Link to={`/product/${item.productId}`} className={classes.block}>
               <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                   component="img"

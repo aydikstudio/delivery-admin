@@ -10,6 +10,53 @@ $permitted_chars = 'Nuok-3f9IOdSwVKTTIVgjDf2M-MUKG318a3g4UvZnVnelb0iBEl2zib3PF9N
 if(isset($_POST)) {
 
 
+    if($_POST['type'] == "updateproduct") {
+        $id = $_POST["productid"];
+
+
+           
+
+            
+            
+          
+            if($_FILES['downloadreportFileProducts']) {
+
+                $query ="SELECT * FROM `products` WHERE `productId`='".$id."'";
+            
+            $result = mysqli_query($mysqli, $query) or die("Ошибка " . mysqli_error($mysqli)); 
+            $result1 = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+            @unlink('../../api/img/products/'.$result1[0]['img']);
+                $img_name = rand(500000000, 150000000000000);
+                $type="";
+                if($_FILES['downloadreportFileProducts']['type'] == 'image/jpeg') {
+                    $type = ".jpg";
+                }
+            
+                if($_FILES['downloadreportFileProducts']['type'] == 'image/png') {
+                    $type = ".png";
+                }
+            
+              
+                echo  $img_name.$type;
+                
+                if (@copy($_FILES['downloadreportFileProducts']['tmp_name'], '../../api/img/products/' . $img_name.$type)) {
+                    $sql = "UPDATE products SET productName = '".$_POST['name']."', img='".$img_name.$type."', description = '".$_POST['description']."', 
+                     category_id = '".$_POST['category']."', price = '".$_POST['price']."' WHERE productId = ".$id ;
+                } else {
+                    echo "No";
+                }
+            }  else {
+                $sql = "UPDATE products SET productName = '".$_POST['name']."', description = '".$_POST['description']."', 
+                category_id = '".$_POST['category']."', price = '".$_POST['price']."' WHERE productId = ".$id ;
+            }
+        
+
+        mysqli_query($mysqli, $sql); 
+        echo "yes";
+    }
+
+
     if($_POST['type'] == 'authSubmitted') {
         $name = trim($_POST['name']);
         $password = trim($_POST['password']);
@@ -120,6 +167,27 @@ if($_FILES['downloadreportFileProducts']) {
 
 
 if(isset($_GET)) {
+
+    
+
+    if($_GET['type'] == 'getDataCategoryById' ) {
+        $query_add = "SELECT * FROM `categories` WHERE category_id=".$_GET['id'];
+        $res = mysqli_query($mysqli, $query_add);
+        while ($result =  mysqli_fetch_assoc($res)) {
+            $data[] = $result;
+         }
+         echo json_encode($data);
+    }
+
+
+    if($_GET['type'] == 'getProductById' ) {
+        $query_add = "SELECT * FROM products p JOIN categories c ON c.category_id = p.category_id WHERE `productId`=".$_GET['id'];
+        $res = mysqli_query($mysqli, $query_add);
+        while ($result =  mysqli_fetch_assoc($res)) {
+            $data[] = $result;
+         }
+         echo json_encode($data);
+    }
 
 
     if($_GET['type'] == 'updateddata') {

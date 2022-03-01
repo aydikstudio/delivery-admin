@@ -19,7 +19,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 import axios from "axios";
 
@@ -38,6 +38,7 @@ const style = {
 };
 
 function Product() {
+  const {id} = useParams();
   const [nameGood, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState({});
@@ -72,6 +73,41 @@ function Product() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  useEffect(() => {
+    getData()
+  }, [])
+
+
+  async function getData() {
+    await axios
+      .get("http://delivery-food/admin/api/managedata.php?type=getProductById&id="+id)
+      .then((res) => {
+        if (res.data != null) {
+          setName(res.data[0].productName);
+          setPrice(res.data[0].price);
+          setDescription(res.data[0].description);
+          getDataCategoryById(res.data[0].category_id);
+        }
+      });
+  }
+
+
+  
+  async function getDataCategoryById(id) {
+    await axios
+      .get("http://delivery-food/admin/api/managedata.php?type=getDataCategoryById&id="+id)
+      .then((res) => {
+        if (res.data != null) {
+          setCategory(res.data[0]);
+        }
+      });
+  }
+
+
+
+
+
+
   async function addCategory() {
     if (parent == 0) {
       if (
@@ -94,7 +130,6 @@ function Product() {
             },
           })
           .then((res) => {
-            console.log(res.data);
             if (res.data == "yes") {
               alert("Категория добавлена");
               window.location.reload();
@@ -174,15 +209,18 @@ function Product() {
     });
   }
 
-  async function addProduct() {
+  async function updateProduct() {
     const formData = new FormData();
+ 
     formData.append("downloadreportFileProducts", downloadreportFileProducts);
+    formData.append("productid", id);
     formData.append("name", nameGood);
     formData.append("description", description);
     formData.append("category", category.category_id);
     formData.append("price", price);
-    formData.append("type", "addproduct");
+    formData.append("type", "updateproduct");
 
+  
     return await axios
       .post("http://delivery-food/admin/api/managedata.php", formData, {
         headers: {
@@ -190,7 +228,6 @@ function Product() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data == "yes") {
           alert("Продукт создан");
           window.location.reload();
@@ -210,7 +247,7 @@ function Product() {
     <>
       <Zagalovok text="Редактирование продукта" />
       <Grid container style={{ textAlign: "center" }}>
-        <Grid xs={6}>
+        <Grid xs={12}>
           <FormControl>
             <TextField
               id="outlined-basic"
@@ -226,7 +263,7 @@ function Product() {
 
 
       <Grid container mt={2} style={{ textAlign: "center" }}>
-        <Grid xs={6}>
+        <Grid xs={12}>
           <FormControl>
           <TextField
   placeholder="Описание"
@@ -243,7 +280,7 @@ function Product() {
 
   
       <Grid container mt={2} style={{ textAlign: "center" }}>
-        <Grid xs={6}>
+        <Grid xs={12}>
           <FormControl>
             <TextField
               id="outlined-basic"
@@ -256,7 +293,7 @@ function Product() {
         </Grid>
       </Grid>
       <Grid container mt={2} style={{ textAlign: "center" }}>
-        <Grid xs={6}>
+        <Grid xs={12}>
           <FormControl>
             <Typography style={{ cursor: "pointer" }} onClick={handleOpen}>
               {category.name || "Выберите категорию"}
@@ -323,9 +360,9 @@ function Product() {
           <Button
             variant="outlined"
             disabled={disabled}
-            onClick={(e) => addProduct()}
+            onClick={(e) => updateProduct()}
           >
-            Добавить
+            Обновить
           </Button>
         </Grid>
       </Grid>

@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import CardActions from '@mui/material/CardActions';
-import { Button, Paper, Typography } from "@mui/material";
+import { Button, Container, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import TextField from '@mui/material/TextField';
 import Zagalovok from "../../components/zagalovok";
@@ -120,8 +120,9 @@ function Order() {
   return (
     <>
       <Zagalovok text={"Заказ №" + id} />
+      <Container>
       <Grid container>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Сумма</Typography>
@@ -129,7 +130,7 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Кол-во</Typography>
@@ -137,7 +138,7 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Комментарий клиента</Typography>
@@ -145,7 +146,7 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Способ оплаты</Typography>
@@ -154,7 +155,7 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Контакты клиента</Typography>
@@ -163,7 +164,7 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <p>Статус: <b>{order.status}</b></p>
@@ -219,7 +220,7 @@ function Order() {
           
         )
       }) : "Нет данных"}
-     
+     </Container>
     </>
   );
 }
