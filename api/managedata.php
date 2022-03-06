@@ -9,15 +9,67 @@ $permitted_chars = 'Nuok-3f9IOdSwVKTTIVgjDf2M-MUKG318a3g4UvZnVnelb0iBEl2zib3PF9N
 
 if(isset($_POST)) {
 
+    if($_POST['type'] == "deleteProduct") {
+        $id = $_POST["productid"];
+        $query ="SELECT * FROM `products` WHERE `productId`='".$id."'";
+            
+        $result = mysqli_query($mysqli, $query) or die("Ошибка " . mysqli_error($mysqli)); 
+        $result1 = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        @unlink('../../api/img/products/'.$result1[0]['img']);
+
+        $sql = "DELETE FROM `products` WHERE productId = ".$id;
+        mysqli_query($mysqli, $sql); 
+        echo "yes";
+    }
+
+    if($_POST['type'] == "updatecategory") {
+        $id = $_POST["category_id"];
+        $query ="SELECT * FROM `categories` WHERE `category_id`='".$id."'";
+            
+        $result = mysqli_query($mysqli, $query) or die("Ошибка " . mysqli_error($mysqli)); 
+        $result1 = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+       
+          
+            if($_FILES['downloadreportFileCategory']) {
+
+               
+
+            @unlink('../../api/img/categories/'.$result1[0]['img']);
+                $img_name = rand(500000000, 150000000000000);
+                $type="";
+                if($_FILES['downloadreportFileCategory']['type'] == 'image/jpeg') {
+                    $type = ".jpg";
+                }
+            
+                if($_FILES['downloadreportFileCategory']['type'] == 'image/png') {
+                    $type = ".png";
+                }
+            
+            
+                
+                if (@copy($_FILES['downloadreportFileCategory']['tmp_name'], '../../api/img/categories/' . $img_name.$type)) {
+                    $sql = "UPDATE categories SET name = '".$_POST['name']."', img='".$img_name.$type."', parent_id = ".$_POST['parent_id']." WHERE category_id = ".$id ;
+                } else {
+                    echo "No";
+                }
+            }  else {
+                if(count($result1[0]['img']) > 0 && $_POST['parent_id'] != 0) {
+                    @unlink('../../api/img/categories/'.$result1[0]['img']);
+                }
+                $sql = "UPDATE categories SET name = '".$_POST['name']."', parent_id = ".$_POST['parent_id'].",  img=NULL WHERE category_id = ".$id ;
+            }
+        
+
+        mysqli_query($mysqli, $sql); 
+        echo "yes";
+    }
+
+
 
     if($_POST['type'] == "updateproduct") {
         $id = $_POST["productid"];
 
-
-           
-
-            
-            
           
             if($_FILES['downloadreportFileProducts']) {
 

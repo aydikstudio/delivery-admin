@@ -123,6 +123,12 @@ function Product() {
         formData.append("name", categoryName);
         formData.append("parent", parent);
 
+        if(!downloadreportFileCategory && parent == 0) {
+
+          alert("Добавьте фото для родительской категории");
+          return;
+        }      
+
         return await axios
           .post("http://delivery-food/admin/api/managedata.php", formData, {
             headers: {
@@ -194,6 +200,7 @@ function Product() {
             label={item.name}
             onClick={(e) => setCategory(item)}
           >
+            <Link to={`/editcategory/${item.category_id}`}>Ред.</Link>
             {getChildCategories(item)}
           </TreeItem>
         );
@@ -203,7 +210,9 @@ function Product() {
             nodeId={item.category_id}
             label={item.name}
             onClick={(e) => setCategory(item)}
-          />
+          >
+          <Link to={`/editcategory/${item.category_id}`}>Ред.</Link>
+          </TreeItem>
         );
       }
     });
@@ -231,6 +240,27 @@ function Product() {
         if (res.data == "yes") {
           alert("Продукт создан");
           window.location.reload();
+        }
+      });
+  }
+
+
+
+  async function deleteProduct() {
+    const formData = new FormData();
+    formData.append("productid", id);
+    formData.append("type", "deleteProduct");
+
+  
+    return await axios
+      .post("http://delivery-food/admin/api/managedata.php", formData, {
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        if (res.data == "yes") {
+          window.location.href = "/products";
         }
       });
   }
@@ -333,6 +363,7 @@ function Product() {
                               label={item.name}
                               onClick={(e) => setCategory(item)}
                             >
+                              <Link to={`/editcategory/${item.category_id}`}>Ред.</Link>
                               {getChildCategories(item)}
                             </TreeItem>
                           );
@@ -363,6 +394,19 @@ function Product() {
             onClick={(e) => updateProduct()}
           >
             Обновить
+          </Button>
+        </Grid>
+      </Grid>
+
+
+      <Grid container mt={2} style={{ textAlign: "center" }}>
+        <Grid xs={6}>
+          <Button
+            variant="text"
+            disabled={disabled}
+            onClick={(e) => deleteProduct()}
+          >
+            Удалить
           </Button>
         </Grid>
       </Grid>

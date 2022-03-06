@@ -19,6 +19,7 @@ import Product from "./pages/Product/Product";
 import Button from '@mui/material/Button';
 import Container from "@mui/material/Container";
 import Auth from "./pages/Auth";
+import CategoryEdit from "./pages/Category/Category";
 
  const useStyles = makeStyles((theme) => ({
   main: {
@@ -68,6 +69,7 @@ function App() {
             <Route path="/addproduct" element={<AddProduct />} />
             <Route path="/order/:id" element={<Order />} />
             <Route path="/product/:id" element={<Product />} />
+            <Route path="/editcategory/:id" element={<CategoryEdit />} />
             <Route path="*" element={<NotPage />} />
           </Routes>
           </Grid>

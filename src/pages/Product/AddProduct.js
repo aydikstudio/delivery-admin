@@ -159,7 +159,7 @@ function AddProduct() {
             label={item.name}
             onClick={(e) => setCategory(item)}
           >
-            <Link to={`/edit/${item.category_id}`}>Ред.</Link>
+            <Link to={`/editcategory/${item.category_id}`}>Ред.</Link>
             {getChildCategories(item)}
           </TreeItem>
         );
@@ -170,7 +170,7 @@ function AddProduct() {
             label={item.name}
             onClick={(e) => setCategory(item)}
           >
-<Link to={`/edit/${item.category_id}`}>Ред.</Link>
+<Link to={`/editcategory/${item.category_id}`}>Ред.</Link>
             </TreeItem>
         );
       }
@@ -193,7 +193,6 @@ function AddProduct() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data == "yes") {
           alert("Продукт создан");
           window.location.reload();
@@ -213,7 +212,7 @@ function AddProduct() {
     <>
       <Zagalovok text="Добавление продукта" />
       <Grid container style={{ textAlign: "center" }}>
-        <Grid xs={6}>
+        <Grid xs={12}>
           <FormControl>
             <TextField
               id="outlined-basic"
@@ -229,7 +228,7 @@ function AddProduct() {
 
 
       <Grid container mt={2} style={{ textAlign: "center" }}>
-        <Grid xs={6}>
+        <Grid xs={12}>
           <FormControl>
           <TextField
   placeholder="Описание"
@@ -246,7 +245,7 @@ function AddProduct() {
 
   
       <Grid container mt={2} style={{ textAlign: "center" }}>
-        <Grid xs={6}>
+        <Grid xs={12}>
           <FormControl>
             <TextField
               id="outlined-basic"
@@ -298,7 +297,7 @@ function AddProduct() {
                               nodeId={item.category_id}
                               label={item.name}
                               onClick={(e) => setCategory(item)}
-                            ><Link to={`/edit/${item.category_id}`}>Ред.</Link>
+                            ><Link to={`/editcategory/${item.category_id}`}>Ред.</Link>
                               {getChildCategories(item)}
                               
                             </TreeItem>
