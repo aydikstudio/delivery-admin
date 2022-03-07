@@ -51,7 +51,7 @@ if(isset($_POST)) {
                 if (@copy($_FILES['downloadreportFileCategory']['tmp_name'], '../../api/img/categories/' . $img_name.$type)) {
                     $sql = "UPDATE categories SET name = '".$_POST['name']."', img='".$img_name.$type."', parent_id = ".$_POST['parent_id']." WHERE category_id = ".$id ;
                 } else {
-                    echo "No";
+                    echo "no";
                 }
             }  else {
                 if(count($result1[0]['img']) > 0 && $_POST['parent_id'] != 0) {

@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
 function Order() {
   const { id } = useParams();
  
-  const [status, setStatus] = useState('unprocessed');
+  const [status, setStatus] = useState();
   const [order, setOrder] = useState({});
   const [orders, setOrders] = useState([]);
   const [summa, setSumma] = useState();
 
-  const handleChange = (event) => {
-    setStatus(event.target.value);
+  const handleChange = (value) => {
+    setStatus(value);
   };
 
 
@@ -59,7 +59,7 @@ function Order() {
     .then(function (response) {
 
       if(response.data != null) {
-
+        setStatus(response.data[0].status);
         setOrder(response.data[0]);
         setSumma(response.data[0].summa);
       }
@@ -120,17 +120,17 @@ function Order() {
   return (
     <>
       <Zagalovok text={"Заказ №" + id} />
-      <Container>
+      <Container  sx={{ width: 1850 }}>
       <Grid container>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Сумма</Typography>
-              <TextField id="outlined-basic" label="Скорректировать сумму" variant="outlined" value={summa} onChange={(e) => setSumma(e.target.value)}/>
+              <TextField id="outlined-basic" variant="outlined" value={summa} onChange={(e) => setSumma(e.target.value)}/>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Кол-во</Typography>
@@ -138,7 +138,7 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Комментарий клиента</Typography>
@@ -146,7 +146,7 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Способ оплаты</Typography>
@@ -155,7 +155,7 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item mt={5} xs={3}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <Typography variant={"h6"}>Контакты клиента</Typography>
@@ -164,18 +164,21 @@ function Order() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Card className={classes.blockOrder}>
             <CardContent>
               <p>Статус: <b>{order.status}</b></p>
-            <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Статус</InputLabel>
-        <Select
+           
+        {console.log(order.status)}
+        {order.status && (
+           <FormControl fullWidth>
+           <InputLabel id="demo-simple-select-label">Статус</InputLabel>
+           <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={order.status}
+          value={status}
           label="Статус"
-          onChange={handleChange}
+          onChange={(e) => handleChange(e.target.value)}
         >
           <MenuItem value={"Создан"}>Создан</MenuItem>
           <MenuItem value={"Неактуально"}>Неактуально</MenuItem>
@@ -184,6 +187,7 @@ function Order() {
         </Select>
 
       </FormControl>
+        )}
               
             </CardContent>
             <CardActions style={{ justifyContent: 'center'}}>

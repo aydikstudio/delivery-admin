@@ -107,10 +107,13 @@ function CategoryEdit() {
         },
       })
       .then((res) => {
-        console.log(res.data)
         if (res.data == "yes") {
-          // alert("Категория обновлена");
-          // window.location.reload();
+          alert("Категория обновлена");
+          window.location.reload();
+        }
+
+        if (res.data == "no") {
+          alert("Категория необновлена");
         }
       });
   }

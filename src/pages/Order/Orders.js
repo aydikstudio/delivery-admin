@@ -17,13 +17,17 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Pagination,
+  PaginationItem
 } from "@mui/material";
 
 
 export default function Orders() {
 
   const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [salePerPage] = useState(20);
 
   useEffect(() => {
     getOrders();
@@ -49,12 +53,19 @@ export default function Orders() {
   }
 
 
+
+  const lastShipmentIndex = currentPage * salePerPage;
+  const firstShipmentIndex = lastShipmentIndex - salePerPage;
+  const currentShipment = orders.slice(firstShipmentIndex, lastShipmentIndex);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <>
     <Zagalovok text="Заказы" />
-    <div style={{ height: 400, width: '100%' }}>
-    <TableContainer component={Paper}>
-      <Table sx={{ width: 1650 }} aria-label="simple table">
+
+    <TableContainer component={Paper} style={{ width: 1350, overflow:  "hidden"}}>
+      <Table  aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Номер заказа</TableCell>
@@ -66,7 +77,7 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.length > 0 ? orders.map((row) => (
+          {currentShipment.length > 0 ? currentShipment.map((row) => (
             <TableRow
               key={row.order_number}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -83,10 +94,16 @@ export default function Orders() {
               <TableCell align="right">{row.status}</TableCell>
             </TableRow>
           )) : "Нет данных"}
+         <Pagination count={orders.length} renderItem={(item) => (
+    <PaginationItem
+      {...item}
+      onClick={(e) => paginate(item.page)}
+    />
+  )}/>
         </TableBody>
       </Table>
     </TableContainer>
-    </div>
+ 
     </>
   );
 }
